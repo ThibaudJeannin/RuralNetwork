@@ -14,8 +14,11 @@ inputs <- data %>% subset(select=predictors)
 outputs <- data %>% subset(select=targets)
 
 
-weights1 <- matrix(c(c(1,2,3,42), c(4,5,6,42), c(7,8,9,42)), nrow = 4, ncol = 3)
-weigths2 <- matrix(c(0.1, 0.2, 0.3, 0.4), nrow = 1, ncol=4)
+weights1 <- matrix(runif(4*3, 0, 1), nrow = 4, ncol = 3)
+weights2 <- matrix(runif(1*4, 0, 1), nrow = 1, ncol=4)
+
+print(weights1)
+print(weights2)
 
 for(i in 1:nrow(data)){
   input_row <- data[i,] %>% subset(select=predictors) %>% unlist
