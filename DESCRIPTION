@@ -1,11 +1,10 @@
 Package: RuralNetwork
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Rural Network (R Neural Network)
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: thibaud jeannin (thibaud.jeannin@gmail.com)
+Maintainer: thibaud jeannin <thibaud.jeannin@gmail.com>
+Description: R implementation of neural networks, for educational purpose
+License: GPL-3.0
 Encoding: UTF-8
 LazyData: true
