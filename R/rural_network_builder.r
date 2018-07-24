@@ -29,9 +29,9 @@ Layer <- setClass(
 
 setMethod('print','Layer', function(x){
   cat(sprintf('Layer (%s) with %s neurons\n', x@type, length(x@neurons))) 
-  for (i in seq(x@neurons)) {
-    print(x@neurons[[i]])
-  }
+  # for (i in seq(x@neurons)) {
+  #   print(x@neurons[[i]])
+  # }
   cat('\n')
 })
 
@@ -42,6 +42,14 @@ Network <- setClass(
   ),
   prototype = prototype(layers=list())
 )
+
+setMethod('print','Network', function(x){
+  cat(sprintf('Neural network with %s layers \n', length(x@layers))) 
+  for (i in seq(x@layers)) {
+    print(x@layers[[i]])
+  }
+  cat('\n')
+})
 
 LayerBuilder <- setClass(
   "LayerBuilder",
@@ -90,12 +98,7 @@ setGeneric('build', def = function (self) { standardGeneric("build") })
 setMethod('build', "NetworkBuilder", function(self) {
   layers <- list()
   for (i in seq(self@layers)) {
-    weigths = NULL
     if (i == 1) {
-      weigths = NULL
-      type = "input"
-      
-      
       layer <- new(
         "Layer", 
         neurons = matrix(nrow = 1, ncol = self@layers[[i]]@size),
@@ -116,10 +119,12 @@ setMethod('build', "NetworkBuilder", function(self) {
         ) 
       )
     }
+    print(layer)
     layers %<>% append(layer)
+    print(layers)
   }
   return(new("Network", layers = layers))
 })
 
 nnet %<>% build
-print (nnet)
+print(nnet)
