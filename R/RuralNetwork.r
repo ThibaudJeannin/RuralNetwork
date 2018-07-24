@@ -24,3 +24,28 @@ RuralNetwork <- R6Class(
 )
 
 nnet <- RuralNetwork$new(list(42,43))
+
+RuralNetworkBuilder <- R6Class(
+  "RuralNetworkBuilder",
+  public = list(
+    
+    initialise = function() {
+      
+    },
+    
+    build = function() {
+      
+    },
+    
+    withLayer = function(layerBuilder) {
+      
+    }
+    
+  ),
+  
+  private = list(
+    
+    layers = NULL
+    
+  )
+)
