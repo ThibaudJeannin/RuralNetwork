@@ -15,23 +15,33 @@ setMethod('print','Neuron', function(x){
 Layer <- setClass(
   "Layer",
   slots = c(
-    neurons = "list",
-    weights = "matrix"
+    neurons = "matrix",
+    weights = "matrix",
+    type = "character"
   ),
-  prototype = prototype(neurons = list(), weights = matrix(nrow = 0, ncol = 0))
+  contains = "matrix",
+  prototype = prototype(
+    neurons = matrix(nrow = 0, ncol = 0), 
+    weights = matrix(nrow = 0, ncol = 0),
+    type = "simple"
+    )
 )
 
 setMethod('print','Layer', function(x){
-  cat(sprintf('Layer with %s neurons\n', length(x@neurons)))
+  cat(sprintf('Layer (%s) with %s neurons\n', x@type, length(x@neurons))) 
   for (i in seq(x@neurons)) {
     print(x@neurons[[i]])
   }
   cat('\n')
-  # print(x@weights)
 })
 
-# layer = Layer(neurons = c(new(Class = "Neuron", value=2), Neuron(value = 42))) #2 méthode pour instancier l'objet
-# print(layer)
+Network <- setClass(
+  "Network",
+  slots = c(
+    layers = "list"
+  ),
+  prototype = prototype(layers=list())
+)
 
 LayerBuilder <- setClass(
   "LayerBuilder",
@@ -74,3 +84,42 @@ nnet %<>%
   withLayer( new("LayerBuilder") )
 
 print(nnet)
+
+setGeneric('build', def = function (self) { standardGeneric("build") })
+
+setMethod('build', "NetworkBuilder", function(self) {
+  layers <- list()
+  for (i in seq(self@layers)) {
+    weigths = NULL
+    if (i == 1) {
+      weigths = NULL
+      type = "input"
+      
+      
+      layer <- new(
+        "Layer", 
+        neurons = matrix(nrow = 1, ncol = self@layers[[i]]@size),
+        type = "input"
+      )
+    } else {
+      layer <- new(
+        "Layer",
+        neurons = matrix(
+          nrow = 1, 
+          ncol = self@layers[[i]]@size
+        ),
+        type = ifelse((i == length(self@layers)), "output", "hidden"),
+        weights = matrix (
+          runif(self@layers[[i]]@size * self@layers[[i-1]]@size, 0, 1), 
+          nrow = self@layers[[i]]@size, 
+          ncol = self@layers[[i-1]]@size
+        ) 
+      )
+    }
+    layers %<>% append(layer)
+  }
+  return(new("Network", layers = layers))
+})
+
+nnet %<>% build
+print (nnet)
