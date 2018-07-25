@@ -17,6 +17,10 @@ RuralNetwork <- R6Class(
         print(private$m_layers[[i]])
         cat('\n')
       }
+    },
+    
+    process = function(inputs) {
+      
     }
     
   ),
@@ -87,6 +91,10 @@ Layer <- R6Class(
     
     print = function() {
       cat (sprintf('Layer (%s) with %s neurons', private$m_type, nrow(private$m_neurons)))
+    },
+    
+    process = function(inputs) {
+      
     }
     
   ),
