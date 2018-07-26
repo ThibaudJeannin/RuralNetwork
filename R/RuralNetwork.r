@@ -19,6 +19,8 @@ RuralNetwork <- R6Class(
       }
     },
     
+    layer = function(i = 1) {return(private$m_layers[[i]])},
+    
     process = function(inputs) {
       
     }
@@ -85,13 +87,15 @@ Layer <- R6Class(
         nrow = size,
         ncol = 1
       )
-      private$m_neurons <- matrix(
+      private$m_weights <- matrix(
         runif(size * size_prev_layer, 0, 1), nrow = size, ncol = size_prev_layer)
     },
     
     print = function() {
       cat (sprintf('Layer (%s) with %s neurons', private$m_type, nrow(private$m_neurons)))
     },
+    
+    weights = function() {return(private$m_weights)},
     
     process = function(inputs) {
       
@@ -100,8 +104,8 @@ Layer <- R6Class(
   ),
   private = list(
     m_type = NULL,
-    m_neurons = NULL
-    
+    m_neurons = NULL,
+    m_weights = NULL
   )
 )
 
@@ -134,12 +138,12 @@ LayerBuilder <- R6Class(
   )
 )
 
-nnetB <- RuralNetworkBuilder$new()$
+nnet <- RuralNetworkBuilder$new()$
   withLayer(LayerBuilder$new(2))$
   withLayer(LayerBuilder$new(3))$
-  withLayer(LayerBuilder$new(1))
+  withLayer(LayerBuilder$new(1))$
+  build()
 
-print(nnetB)
-
-nnet <- nnetB$build()
 print(nnet)
+print(nnet$layer(2)$weights())
+print(nnet$layer(3)$weights())
