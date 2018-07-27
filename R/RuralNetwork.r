@@ -22,7 +22,10 @@ RuralNetwork <- R6Class(
     layer = function(i = 1) {return(private$m_layers[[i]])},
     
     process = function(inputs) {
-      
+      for (layer_index in seq(private$m_layers)) {
+        inputs %<>% private$m_layers[[layer_index]]$process()
+      }
+      return(inputs)
     }
     
   ),
@@ -89,16 +92,21 @@ Layer <- R6Class(
       )
       private$m_weights <- matrix(
         runif(size * size_prev_layer, 0, 1), nrow = size, ncol = size_prev_layer)
-    },
+      },
     
     print = function() {
-      cat (sprintf('Layer (%s) with %s neurons', private$m_type, nrow(private$m_neurons)))
+      cat (sprintf('Layer (%s) with %s neurons\n', private$m_type, nrow(private$m_neurons)))
+      print(private$m_weights)
     },
     
     weights = function() {return(private$m_weights)},
     
     process = function(inputs) {
+      private$m_neurons <- matrix(inputs, ncol = length(inputs))
       
+      if (private$m_type == 'input') {return(inputs)}
+      
+      return(private$m_weights %*% t(private$m_neurons))
     }
     
   ),
@@ -110,7 +118,7 @@ Layer <- R6Class(
 )
 
 LayerBuilder <- R6Class(
-  "Layer",
+  "LayerBuilder",
   public = list(
 
     initialize = function(size = 1, type="simple") {
@@ -124,7 +132,7 @@ LayerBuilder <- R6Class(
     },
     
     build = function(size_prev = 0) {
-      return(Layer$new(type = "simple", size = private$m_size, size_prev = size_prev))
+      return(Layer$new(ifelse(size_prev == 0, 'input', private$m_type), size = private$m_size, size_prev = size_prev))
     },
     
     size = function() { return(private$m_size) }
@@ -137,3 +145,5 @@ LayerBuilder <- R6Class(
     
   )
 )
+
+source('R/RuralNetworkTest.r')
