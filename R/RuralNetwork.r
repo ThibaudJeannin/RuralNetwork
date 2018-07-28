@@ -106,6 +106,7 @@ Layer <- R6Class(
       
       if (private$m_type == 'input') {return(inputs)}
       
+      #Implicit activation function : y = x
       return(private$m_weights %*% t(private$m_neurons))
     }
     

@@ -18,6 +18,7 @@ targets = c('res')
 
 for(i in 1:nrow(data)){
   input_row <- data[i,] %>% subset(select=predictors) %>% unlist
+  output_row <- data[i,] %>% subset(select=targets) %>% unlist
   result <- nnet$process(input_row)
-  print(result)
+  cat(sprintf('result : %f, ground truth : %f\n', result, output_row))
 }
