@@ -96,7 +96,8 @@ Layer <- R6Class(
       private$m_activation_function <- switch(activation_function,
                                              linear=function(x){return(x)},
                                              sigmoid=function(x){return(1/(1+exp(-x)))},
-                                             relu=function(x){return(ifelse(x<0, 0, x))}
+                                             relu=function(x){return(ifelse(x<0, 0, x))},
+                                             tanh=function(x){return(tanh(x))}
                                              )
       
       },
