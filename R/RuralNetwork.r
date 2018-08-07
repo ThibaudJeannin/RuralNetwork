@@ -91,14 +91,17 @@ Layer <- R6Class(
         ncol = 1
       )
       private$m_weights <- matrix(
-        runif(size * size_prev_layer, 0, 1), nrow = size, ncol = size_prev_layer)
+        runif(size * size_prev_layer, 0, 1),
+        nrow = size,
+        ncol = size_prev_layer
+      )
       
       private$m_activation_function <- switch(activation_function,
-                                             linear=function(x){return(x)},
-                                             sigmoid=function(x){return(1/(1+exp(-x)))},
-                                             relu=function(x){return(ifelse(x<0, 0, x))},
-                                             tanh=function(x){return(tanh(x))}
-                                             )
+        linear=function(x){return(x)},
+        sigmoid=function(x){return(1/(1+exp(-x)))},
+        relu=function(x){return(ifelse(x<0, 0, x))},
+        tanh=function(x){return(tanh(x))}
+        )
       
       },
     
@@ -150,11 +153,9 @@ LayerBuilder <- R6Class(
 
   ),
   private = list(
-    
     m_type = NULL,
     m_size = NULL,
     m_activation_function = NULL
-    
   )
 )
 

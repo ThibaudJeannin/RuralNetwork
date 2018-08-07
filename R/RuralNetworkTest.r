@@ -1,10 +1,11 @@
-nnet <- RuralNetworkBuilder$new()$
+neuralNetworkBuilder <- RuralNetworkBuilder$new()$
   withLayer(LayerBuilder$new(3,activation_function = "linear"))$
   withLayer(LayerBuilder$new(4,activation_function = "relu"))$
-  withLayer(LayerBuilder$new(1,activation_function = "sigmoid"))$
-  build()
+  withLayer(LayerBuilder$new(1,activation_function = "sigmoid"))
 
-print(nnet)
+neuralNetwork <- neuralNetworkBuilder$build()
+
+print(neuralNetworkBuilder)
 
 data <- data.frame(
   col1=c(0,0,1,1),
@@ -19,6 +20,6 @@ targets = c('res')
 for(i in 1:nrow(data)){
   input_row <- data[i,] %>% subset(select=predictors) %>% unlist
   output_row <- data[i,] %>% subset(select=targets) %>% unlist
-  result <- nnet$process(input_row)
+  result <- neuralNetwork$process(input_row)
   cat(sprintf('result : %f, ground truth : %f\n', result, output_row))
 }
