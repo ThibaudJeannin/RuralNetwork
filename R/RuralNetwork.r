@@ -95,7 +95,8 @@ Layer <- R6Class(
       
       private$m_activation_function <- switch(activation_function,
                                              linear=function(x){return(x)},
-                                             sigmoid=function(x){return(1/(1+exp(-x)))}
+                                             sigmoid=function(x){return(1/(1+exp(-x)))},
+                                             relu=function(x){return(ifelse(x<0, 0, x))}
                                              )
       
       },
@@ -137,7 +138,7 @@ LayerBuilder <- R6Class(
     },
 
     print = function() {
-      cat (sprintf('LayerBuilder (%s) with %s neurons', private$m_type, private$m_size))
+      cat (sprintf('LayerBuilder (%s/%s) with %s neurons', private$m_type, private$m_activation_function, private$m_size))
     },
     
     build = function(size_prev = 0) {
