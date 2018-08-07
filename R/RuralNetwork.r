@@ -84,7 +84,7 @@ Layer <- R6Class(
   "Layer",
   public = list(
     
-    initialize = function(size, size_prev_layer, type="simple") {
+    initialize = function(size, size_prev_layer, type="simple", activation_function) {
       private$m_type <- type
       private$m_neurons <- matrix(
         nrow = size,
@@ -92,6 +92,12 @@ Layer <- R6Class(
       )
       private$m_weights <- matrix(
         runif(size * size_prev_layer, 0, 1), nrow = size, ncol = size_prev_layer)
+      
+      private$m_activation_function <- switch(activation_function,
+                                             linear=function(x){return(x)},
+                                             sigmoid=function(x){return(1/(1+exp(-x)))}
+                                             )
+      
       },
     
     print = function() {
@@ -104,7 +110,7 @@ Layer <- R6Class(
     process = function(inputs) {
       private$m_neurons <- matrix(inputs, ncol = length(inputs))
       
-      if (private$m_type == 'input') {return(inputs)}
+      if (private$m_type == 'input') {return(private$m_activation_function(inputs))}
       
       #Implicit activation function : y = x
       return(private$m_weights %*% t(private$m_neurons))
@@ -114,7 +120,8 @@ Layer <- R6Class(
   private = list(
     m_type = NULL,
     m_neurons = NULL,
-    m_weights = NULL
+    m_weights = NULL,
+    m_activation_function = NULL
   )
 )
 
@@ -122,9 +129,10 @@ LayerBuilder <- R6Class(
   "LayerBuilder",
   public = list(
 
-    initialize = function(size = 1, type="simple") {
-      private$m_type = type
-      private$m_size = size
+    initialize = function(size = 1, type="simple", activation_function) {
+      private$m_type <- type
+      private$m_size <- size
+      private$m_activation_function <- activation_function
 
     },
 
@@ -133,7 +141,7 @@ LayerBuilder <- R6Class(
     },
     
     build = function(size_prev = 0) {
-      return(Layer$new(ifelse(size_prev == 0, 'input', private$m_type), size = private$m_size, size_prev = size_prev))
+      return(Layer$new(ifelse(size_prev == 0, 'input', private$m_type), size = private$m_size, size_prev = size_prev, activation_function = private$m_activation_function))
     },
     
     size = function() { return(private$m_size) }
@@ -142,7 +150,8 @@ LayerBuilder <- R6Class(
   private = list(
     
     m_type = NULL,
-    m_size = NULL
+    m_size = NULL,
+    m_activation_function = NULL
     
   )
 )

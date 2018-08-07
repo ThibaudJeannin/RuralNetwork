@@ -1,7 +1,7 @@
 nnet <- RuralNetworkBuilder$new()$
-  withLayer(LayerBuilder$new(3))$
-  withLayer(LayerBuilder$new(4))$
-  withLayer(LayerBuilder$new(1))$
+  withLayer(LayerBuilder$new(3,activation_function = "linear"))$
+  withLayer(LayerBuilder$new(4,activation_function = "sigmoid"))$
+  withLayer(LayerBuilder$new(1,activation_function = "sigmoid"))$
   build()
 
 print(nnet)
